@@ -11,9 +11,13 @@ varying vec4 vColor;
 
 
 void main() {
-  // フラグメントシェーダーに値を渡すための変数
-  vPosition = position;
   vColor = color;
+  
+  // vPosition = position;
+  // →MVP 行列などでジオメトリが回転した場合に、描画される頂点は回転運動しているのに、フラグメントシェーダに送られる頂点の座標情報は一切変換が掛かっていない状態になってしまう
+  
+  // モデル座標変換を掛けた状態の頂点座標を作る
+  vPosition =  (mvpMatrix * vec4(position, 0.0)).xyz;
 
   // 法線をまず行列で変換
   vNormal = (normalMatrix * vec4(normal, 0.0)).xyz;
